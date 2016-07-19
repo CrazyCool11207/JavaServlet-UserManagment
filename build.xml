@@ -1,0 +1,61 @@
+<!--windows-Based! A little helper script to deploy modules to FLRT. The process of FLRT is killed by a batch-script and restartet again-->
+<!--Adjust the properties below-->
+<project name="FLRT deyployment helper" default="DEPLOY-MODULE" basedir=".">
+    <!--Fill in the name of the ZIP without the hash-->
+    <property name="artifact.name" value="test"/>
+    <!--Fill in the path to maven target dir-->
+    <property name="maven.target" value="./target"/>
+    <!--Fill in the path to the Fastlane root-dir, where the executable lives-->
+    <property name="fastlane.root.dir" value="D:/_development/apache-tomcat-8.0.36-windows-x64/apache-tomcat-8.0.36"/>
+    <!--Fill in the name of the startfile to run FLRT-->
+    <property name="fastlane.startfile" value="bin/startupDebugging.bat"/>
+    <!--Fill in the name of the batch to kill FLRT-process. The batchg-file is assumed to be in the FLRT rootfolder-->
+    <property name="fastlane.kill_process_batchfile" value="bin/shutdown.bat"/>
+    <property name="deployment_folder" value="webapps"/>
+
+
+    <target name="DEPLOY-MODULE" depends="maven-clean-install, kill-FLRT, delete_old_ZIP, copy_module_ZIP, start_FLRT"
+            description="deployment cycle"/>
+
+    <target name="maven-clean-install" description="executes mvn clean install">
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn clean install"/>
+        </exec>
+    </target>
+
+    <target name="delete_old_ZIP" description="deletes old ZIP of the module from the deployed_modules folder">
+        <delete>
+            <fileset dir="${fastlane.root.dir}/${deployment_folder}" includes="${artifact.name}.war"/>
+        </delete>
+        <delete dir="${fastlane.root.dir}/${deployment_folder}/${artifact.name}"/>
+    </target>
+
+    <!--<delete>-->
+        <!--<fileset dir="." includes="**/*.bak"/>-->
+    <!--</delete>-->
+
+    <target name="copy_module_ZIP" description="copies the ZIP of the module from the maven target folder to the fastlane deployed module folder">
+        <copy todir="${fastlane.root.dir}/${deployment_folder}">
+            <fileset dir="${maven.target}/">
+                <include name="${artifact.name}.war"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <!--Weired: the FLRT process's name is registered as java-->
+    <target name="kill-FLRT" description="kills the FLRT process">
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="${fastlane.root.dir}/${fastlane.kill_process_batchfile}"/>
+        </exec>
+    </target>
+
+    <target name="start_FLRT" description="start up FLRT">
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="${fastlane.root.dir}/${fastlane.startfile}"/>
+        </exec>
+    </target>
+
+</project>
