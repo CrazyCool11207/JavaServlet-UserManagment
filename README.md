@@ -9,9 +9,9 @@ This Project here is a WebServlet/JavaServlet with a UserManagment system which 
 
 I first created a JavaServlet class in combintaion of a .jsp data where i used HTML code .
 How did I do this ? Well I used Maven which created for me a specific type of structure for using WebServlet/JavaServlet which means that Maven created for me some .jsp data one .xml data I think and so on.
-Maven code ----> Terminal ------>(if installed) -----> mvn generate:archetype-webapp 
+<br>Maven code ----> Terminal ------>(if installed) -----> mvn generate:archetype-webapp 
 After that I "designed" a little bit my .jsp data for some fancy shit.
-Creating a JavaServlet was the next step . But first let me explain to you guys what my project is.
+Creating a JavaServlet was the next step .<br> But first let me explain to you guys what my project is.
 It is a internet site where u can enter your Nickname and your age. That means there are 2 textfields and 1 button for submit.
 After the submission you can play for example  BlackJack (work in progress :D).
 So there is a UserManagment ;) which is controlling how many people are there ? Are there already Players with the same nickname and so on. That should be the Project.
